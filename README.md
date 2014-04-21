@@ -1,4 +1,4 @@
 LuaGame
 =======
 
-Pracitce game project for the Lua LOVE engine
+Pracitce game project for the Lua LÖVE engine
