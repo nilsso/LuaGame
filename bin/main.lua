@@ -1,4 +1,4 @@
-package.path = "./lib/?.lua;" .. package.path
+package.path = "./lib/?.lua;../lib/?.lua;"..package.path
 
 -- Love macros
 G, K, M, W = love.graphics, love.keyboard, love.mouse, love.window
