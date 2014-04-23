@@ -3,6 +3,20 @@ local BaseState = Class{
     entities = {}
 }
 
+function BaseState:mousepressed(x, y, key)
+    for _, e in ipairs(self.entities) do
+        if e.capturing ~= nil and e:capturing() then
+            e:mousepressed(key)
+        end
+    end
+end
+
+function BaseState:update(dt)
+    for _, e in ipairs(self.entities) do
+        e:update(dt)
+    end
+end
+
 function BaseState:draw()
     for _, e in ipairs(self.entities) do
         e:draw()
@@ -19,20 +33,6 @@ function BaseState:draw()
         g.setColor(Colors.white)
         g.print(string.format("State: %s", self.name), 5, 5)
         g.print(string.format("mouse.pos=(%i,%i)", m.getPosition()), 5, 17)
-    end
-end
-
-function BaseState:mousepressed(x, y, key)
-    for _, e in ipairs(self.entities) do
-        if e.capturing ~= nil and e:capturing() then
-            e:mousepressed(key)
-        end
-    end
-end
-
-function BaseState:update(dt)
-    for _, e in ipairs(self.entities) do
-        e:update(dt)
     end
 end
 

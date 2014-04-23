@@ -1,4 +1,4 @@
 #!/bin/bash
 
-love ./bin/
+love ./src/
 

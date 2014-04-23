@@ -1,4 +1,4 @@
-package.path = "./lib/?.lua;../lib/?.lua;"..package.path
+package.path = "./lib/*/?.lua;../lib/*/?.lua;"..package.path
 g, k, m, w = love.graphics, love.keyboard, love.mouse, love.window
 
 -- -----------------------------------------------
@@ -12,16 +12,18 @@ Vector = require "vector"
 -- Utilities
 Colors = require "colors"
 
--- Prototypes
-BaseButton = require "base_button"
-BaseEntity = require "base_entity"
-BaseState = require "base_state"
-
 Debug = {
-    enabled = false,
+    enabled = true,
     drawText = true,
     drawGeom = false
 }
+
+-- Prototypes
+local BaseButton = require "base_button"
+local BaseEntity = require "base_entity"
+local BaseState = require "base_state"
+
+local Particle = Class.new(BaseEntity)
 
 -- States
 local game = BaseState()
@@ -29,7 +31,7 @@ game.name = "Game"
 
 game.entities = {
     BaseButton("Test", 55, w.getHeight()/2, nil),
-    BaseEntity(w.getWidth()/2, w.getHeight()/2)
+    Particle(w.getWidth()/2, w.getHeight()/2)
 }
 
 -- -----------------------------------------------
