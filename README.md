@@ -1,3 +1,3 @@
 # LuaGame
 
-Pracitce game project for the Lua LÖVE engine
+Practice game project for the Lua LÖVE engine
