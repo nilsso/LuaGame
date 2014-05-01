@@ -26,24 +26,18 @@ function BaseParticle:update(dt)
     -- Particle life
     self.life = self.life - 1 * dt
     if self.life <= 0 then
-        self:destroy()
     end
 end
 
 function BaseParticle:draw()
-    self.draw_col.a = self.life / self.life_init
+	-- Draw modes
+    self.draw_col.a = 255 * self.life / self.life_init
     BaseEntity.draw(self)
 
+	-- Debug draw
     if (Debug.enabled) then
         if (Debug.drawText) then
-            G.print(
-                string.format("life=%s", self.life),
-                self.pos.x + self.draw_rad + 5,
-                self.pos.y - self.draw_rad + 5*14)
-            G.print(
-                tostring(self.i),
-                self.pos.x + self.draw_rad + 5,
-                self.pos.y - self.draw_rad + 6*14)
+			--self.info_pr:print("life=%s", self.life)
         end
     end
 end

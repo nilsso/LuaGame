@@ -3,7 +3,7 @@ local BaseState = Class{}
 function BaseState:init()
     -- Entity list and print region
     self.entities = self.entities or {}
-    self.entities_pr = PrintRegion(W.w - 5, 5, "top-right")
+    self.entities_pr = PrintRegion(W.w - 5, 5, "top-right", 200, W.h - 10)
 
     self.dt = 1
 end
