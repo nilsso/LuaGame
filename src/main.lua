@@ -1,8 +1,11 @@
-package.path = "./lib/*/?.lua;../lib/*/?.lua;"..package.path
-g, k, m, w = love.graphics, love.keyboard, love.mouse, love.window
+package.path = "./lib/HUMP/?.lua;../lib/HUMP/?.lua;"..package.path
+--package.path = "./lib/middleclass/?.lua;../lib/middleclass/?.lua" .. package.path
+G, K, M, W = love.graphics, love.keyboard, love.mouse, love.window
+W.w = W.getWidth()
+W.h = W.getHeight()
 
 -- -----------------------------------------------
--- Game Setup
+-- Libraries & Utilities
 -- -----------------------------------------------
 -- Libraries
 Class = require "class"
@@ -10,42 +13,76 @@ Gamestate = require "gamestate"
 Vector = require "vector"
 
 -- Utilities
-Colors = require "colors"
+Colors = {
+    white = {255, 255, 255},
+    ltgray = {191, 191, 191},
+    gray = {127, 127, 127},
+    dkgray = {64, 64, 64},
+    black = {0, 0, 0},
+    red = {255, 0, 0},
+    green = {0, 255, 0},
+    blue = {0, 0, 255}
+}
 
 Debug = {
     enabled = true,
     drawText = true,
-    drawGeom = false
+    drawGeom = true
 }
 
+-- -----------------------------------------------
 -- Prototypes
-local BaseButton = require "base_button"
-local BaseEntity = require "base_entity"
-local BaseState = require "base_state"
+-- -----------------------------------------------
+PrintRegion = require "print_region"
+BaseState = require "base_state"
+--local BaseButton = require "base_button"
+BaseEntity = require "base_entity"
+BaseParticle = require "base_particle"
 
-local Particle = Class.new(BaseEntity)
-
+-- -----------------------------------------------
 -- States
+-- -----------------------------------------------
+local menu = BaseState()
+menu.name = "Menu"
+
 local game = BaseState()
 game.name = "Game"
-
-game.entities = {
-    BaseButton("Test", 55, w.getHeight()/2, nil),
-    Particle(w.getWidth()/2, w.getHeight()/2)
+game.keybinds = {
+    ["escape"] = {{},
+        function()
+            love.event.quit()
+        end},
+    ["g"] = {{"lshift", "rshift"},
+        function()
+            Debug.enabled = not Debug.enabled
+        end},
+    ["z"] = {{},
+        function()
+            if Debug.enabled then
+                Debug.drawGeom = not Debug.drawGeom
+            end
+        end},
+    ["x"] = {{},
+        function()
+            if Debug.enabled then
+                Debug.drawText = not Debug.drawText
+            end
+        end}
 }
 
--- -----------------------------------------------
--- Love Callbacks
--- -----------------------------------------------
-function love.keypressed(key)
-    KEY = key
-    if key == 'g' and (k.isDown("lshift") or k.isDown("rshift")) then
-        Debug.enabled = not Debug.enabled
-    end
-end
+--BaseParticle(game.entities, W.getWidth()/2, W.getHeight()/2)
 
+-- -----------------------------------------------
+-- Callbacks
+-- -----------------------------------------------
 function love.load()
+    math.randomseed(os.time())
     Gamestate.registerEvents()
     Gamestate.switch(game)
+end
+
+function love.update(dt)
+    W.w = W.getWidth()
+    W.h = W.getHeight()
 end
 

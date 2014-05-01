@@ -88,7 +88,6 @@ if class_commons ~= false and not common then
 	end
 end
 
-
 -- the module
 return setmetatable({new = new, include = include, clone = clone},
 	{__call = function(_,...) return new(...) end})

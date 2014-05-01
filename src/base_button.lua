@@ -1,6 +1,5 @@
--- -----------------------------------------------
--- BaseButton Prototype
--- -----------------------------------------------
+local Class = require "class"
+
 local BaseButton = Class{
     bounds = {
         left,

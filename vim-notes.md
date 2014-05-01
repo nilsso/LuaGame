@@ -9,20 +9,21 @@ Just some things I discovered about vim and the vim runtime utilities I'm using 
 
 ### Windows
 ```VimL
-map <C-h> <C-W>h
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-l> <C-W>l
+<C-W>h  " Focus left
+<C-W>j  " Focus down
+<C-W>k  " Focus up
+<C-W>l  " Focus right
+<C-W>x  " Exchange focused with next
 ```
 
 ### Tabs
 ```VimL
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
+<leader>tn :tabnew<cr>
+<leader>to :tabonly<cr>
+<leader>tc :tabclose<cr>
+<leader>tm :tabmove
 " Open tab with current buffer's path
-map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+<leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 ```
 
 ## Plugins
