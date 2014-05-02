@@ -83,20 +83,26 @@ function BaseEntity:draw()
 
         -- Text
         if (Debug.drawText) then
-            self.info_pr.x = self.x
-            self.info_pr.y = self.y
-            if (self.x < W.w/2) then
+            -- Update print region coordinates
+            if (self.pos.x < W.w/2) then
+                self.info_pr.x = self.pos.x-(self.draw_rad+5)
                 self.info_pr.anchor = "top-right"
             else
+                self.info_pr.x = self.pos.x+(self.draw_rad+5)
                 self.info_pr.anchor = "top-left"
             end
+            self.info_pr.y = self.pos.y
+
             self.info_pr:print(string.format("(%g,%g)", self.pos.x, self.pos.y))
             self.info_pr:print("vel=%g", self.vel:len())
             self.info_pr:print("mvF=%s", self.flags.mvF)
             self.info_pr:print("rL=%s", self.flags.rL)
             self.info_pr:print("rR=%s", self.flags.rR)
+            self.info_pr:print("type=%s", type(self))
         end
     end
+
+    self.info_pr:draw()
 end
 
 return BaseEntity

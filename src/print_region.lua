@@ -21,7 +21,7 @@ function PrintRegion:print(s)
 end
 
 function PrintRegion:draw()
-    local px, py
+    local px, py = 0, 0
 
     -- Anchor
     if (self.anchor == "top-left") then
