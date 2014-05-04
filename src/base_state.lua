@@ -1,11 +1,32 @@
+-- Other modules
+local Class = require "class"
+
+-- This module
 local BaseState = Class{}
 
 function BaseState:init()
     -- Entity list and print region
-    self.entities = self.entities or {}
+    self.entities = self.entities or setmetatable({}, {__mode = "k"})
     self.entities_pr = PrintRegion(W.w - 5, 5, "top-right", 200, W.h - 10)
 
-    self.dt = 1
+    -- Info print region
+    self.info_pr = PrintRegion(5, 5, "top-left", 200, W.h - 10)
+
+    self.dt = 0
+end
+
+function BaseState:entity_count(e)
+    local i = 0
+
+    for k, v in pairs(self.entities) do
+        if (e and v.__index == e.__index) then
+            i = i + 1
+        else
+            i = i + 1
+        end
+    end
+
+    return i
 end
 
 function BaseState:keypressed(key)
@@ -28,30 +49,22 @@ function BaseState:keypressed(key)
 end
 
 function BaseState:mousepressed(x, y, key)
-    for _, e in ipairs(self.entities) do
-        if e.capturing ~= nil and e:capturing() then
-            e:mousepressed(key)
+    for k, v in pairs(self.entities) do
+        if v.capturing ~= nil and v:capturing() then
+            v:mousepressed(key)
         end
     end
 end
 
 function BaseState:update(dt)
-    self.dt = self.dt + dt
-    if (self.dt >= 0.5) then
-        BaseParticle(self.entities,
-            W.w/2,
-            W.h/2)
-        self.dt = 0
-    end
-
-    for _, e in ipairs(self.entities) do
-        e:update(dt)
+    for k, v in pairs(self.entities) do
+        v:update(dt)
     end
 end
 
 function BaseState:draw()
-    for _, e in ipairs(self.entities) do
-        e:draw()
+    for k, v in pairs(self.entities) do
+        v:draw()
     end
 
     -- Debug draw
@@ -71,21 +84,19 @@ function BaseState:draw()
         if Debug.drawText then
             G.setColor(Colors.white)
 
-            -- State name
-            G.print(
-                string.format("State: %s",
-                    self.name), 5, 5)
-
-            -- Mouse position
-            G.print(
-                string.format(
-                    "mouse.pos=(%i,%i)",
-                    M.getPosition()), 5, 17)
-
-            -- Entities
-            self.entities_pr:print("ENTITIES:")
+            -- Entity print region
+            self.entities_pr:print({
+                string.format("ENTITIES (count=%s)", self:entity_count()),
+            })
             self.entities_pr:print(self.entities)
             self.entities_pr:draw()
+
+            -- Info print region
+            self.info_pr:print({
+                string.format("State: %s", self.name),
+                string.format("mouse.pos(%i,%i)", M.getPosition()),
+            })
+            self.info_pr:draw()
         end
     end
 end

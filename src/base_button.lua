@@ -1,5 +1,7 @@
+-- Other modules
 local Class = require "class"
 
+-- This module
 local BaseButton = Class{
     bounds = {
         left,
@@ -8,61 +10,16 @@ local BaseButton = Class{
         bottom
     },
     colors = {
-        default = {
-            normal = Colors.gray,
-            highlight = Colors.white,
-            press = Colors.blue
-        },
-        normal = nil,
-        highlight = nil,
-        press = nil
+        back_normal = Colors.gray,
+        back_highlight = Colors.white,
+        back_press = Colors.blue,
+        back
     },
-    color
+    func_press,
+    func_down,
+    func_release
 }
-
-function BaseButton:keypressed(key)
-end
-
-function BaseButton:mousepressed(button)
-    if self.func and button == 'l' then
-        self.func()
-    end
-end
-
-function BaseButton:update(dt)
-    if not self:capturing() then
-        self.color = self.colors.normal
-    elseif not m.isDown('l') then
-        self.color = self.colors.highlight
-    else
-        self.color = self.colors.press
-    end
-end
-
-function BaseButton:init(text, x, y, func, w, h, colN, colH, colP)
-    assert(text, x, y, func)
-    self.text, self.x, self.y, self.func = text, x, y, func
-    self.w, self.h = 100, 20
-    self.colors = {
-        normal = colN or self.colors.default.normal,
-        highlight = colH or self.colors.default.highlight,
-        press = colP or self.colors.default.press
-    }
-    self:calcBounds()
-end
-
-function BaseButton:draw()
-    -- Geometry
-    g.setColor(self.color)
-    g.rectangle("fill", self.bounds.left, self.bounds.top, self.w, self.h)
-
-    -- Text
-    g.setColor(Colors.black)
-    g.print(
-        self.text,
-        self.x-g.getFont():getWidth(self.text)/2,
-        self.y-g.getFont():getHeight(self.text)/2)
-end
+local this = BaseButton
 
 function BaseButton:calcBounds()
     self.bounds.left = self.x-self.w/2
@@ -78,6 +35,57 @@ function BaseButton:capturing()
         mx <= self.bounds.right and
         my >= self.bounds.top and
         my <= self.bounds.bottom)
+end
+
+function BaseButton:init(s, x, y, w, h)
+    -- Assert arguments
+    assert(s)
+    assert(x)
+    assert(y)
+
+    self.text, self.x, self.y = s, x, y
+    self.w = 100 or w
+    self.h = 20 or h
+    self:calcBounds()
+end
+
+function BaseButton:mousepressed(b)
+    if (self.func_press and b == 'l') then
+        self.func_press()
+    end
+end
+
+function BaseButton:mousereleased(b)
+    if (self.func_release and b == 'l') then
+        self.func_releas()
+    end
+end
+
+function BaseButton:update(dt)
+    if (self.func_down and self:capturing() and M.isDown("l")) then
+        self.func_down()
+    end
+end
+
+function BaseButton:draw()
+    if (not self:capturing()) then
+        self.colors.back = self.colors.back_normal
+    elseif (not M.isDown('l')) then
+        self.colors.back = self.colors.back_highlight
+    else
+        self.colors.back = self.colors.back_press
+    end
+
+    -- Geometry
+    G.setColor(self.colors.back)
+    G.rectangle("fill", self.bounds.left, self.bounds.top, self.w, self.h)
+
+    -- Text
+    G.setColor(Colors.black)
+    G.print(
+        self.text,
+        self.x-G.getFont():getWidth(self.text)/2,
+        self.y-G.getFont():getHeight(self.text)/2)
 end
 
 -- Module

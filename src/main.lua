@@ -1,4 +1,4 @@
-package.path = "./lib/HUMP/?.lua;../lib/HUMP/?.lua;"..package.path
+package.path = "./lib/hump/?.lua;../lib/hump/?.lua;"..package.path
 --package.path = "./lib/middleclass/?.lua;../lib/middleclass/?.lua" .. package.path
 G, K, M, W = love.graphics, love.keyboard, love.mouse, love.window
 W.w = W.getWidth()
@@ -8,24 +8,32 @@ W.h = W.getHeight()
 -- Libraries & Utilities
 -- -----------------------------------------------
 -- Libraries
-Class = require "class"
 Gamestate = require "gamestate"
-Vector = require "vector"
 
 -- Utilities
 Colors = {
-    white = {255, 255, 255},
-    ltgray = {191, 191, 191},
-    gray = {127, 127, 127},
-    dkgray = {64, 64, 64},
-    black = {0, 0, 0},
-    red = {255, 0, 0},
-    green = {0, 255, 0},
-    blue = {0, 0, 255}
+    white =     {255,   255,    255,    255},
+    ltgray =    {191,   191,    191,    255},
+    gray =      {127,   127,    127,    255},
+    dkgray =    {64,    64,     64,     255},
+    black =     {0,     0,      0,      255},
+    red =       {255,   0,      0,      255},
+    green =     {0,     255,    0,      255},
+    blue =      {0,     0,      255,    255}
+    --[[
+    white =     {255,   255,    255},
+    ltgray =    {191,   191,    191},
+    gray =      {127,   127,    127},
+    dkgray =    {64,    64,     64},
+    black =     {0,     0,      0},
+    red =       {255,   0,      0},
+    green =     {0,     255,    0},
+    blue =      {0,     0,      255}
+    --]]
 }
 
 Debug = {
-    enabled = true,
+    enabled = false,
     drawText = true,
     drawGeom = true
 }
@@ -35,7 +43,7 @@ Debug = {
 -- -----------------------------------------------
 PrintRegion = require "print_region"
 BaseState = require "base_state"
---local BaseButton = require "base_button"
+BaseButton = require "base_button"
 BaseEntity = require "base_entity"
 BaseParticle = require "base_particle"
 
@@ -67,10 +75,22 @@ game.keybinds = {
             if Debug.enabled then
                 Debug.drawText = not Debug.drawText
             end
+        end},
+    ["c"] = {{},
+        function()
+            collectgarbage()
         end}
 }
 
---BaseParticle(game.entities, W.getWidth()/2, W.getHeight()/2)
+do
+    local button = BaseButton("Particles", 55, W.h/2)
+
+    button.func_down = function()
+        BaseParticle(game.entities, W.w/2, W.h/2)
+    end
+
+    table.insert(game.entities, button)
+end
 
 -- -----------------------------------------------
 -- Callbacks

@@ -1,7 +1,13 @@
+-- Other modules
+local Class = require "class"
+
+-- This module
 local BaseEntity = Class{}
+local this = BaseEntity
 
 function BaseEntity:init(t, x, y)
-    table.insert(t, self)
+    self.table = t
+    self.table[self] = self
 
     self.pos = Vector(x, y)
 
@@ -16,7 +22,7 @@ function BaseEntity:init(t, x, y)
         mvF = false,
         mvB = false,
         rL = false,
-        rR = false,
+        rR = false
     }
 
     self.draw_rad = 8
@@ -26,14 +32,14 @@ function BaseEntity:init(t, x, y)
 end
 
 function BaseEntity:destroy()
-    -- table.remove(self.table, self.index)
+    self.table[self] = nil
 end
 
 function BaseEntity:update(dt)
     -- Input
-    --self.flags.mvF = K.isDown('w')
-    --self.flags.rL = K.isDown('a')
-    --self.flags.rR = K.isDown('d')
+    self.flags.mvF = K.isDown('w')
+    self.flags.rL = K.isDown('a')
+    self.flags.rR = K.isDown('d')
 
     if (self.flags.mvF or self.flags.mvB) and not (self.flags.mvF and self.flags.mvB) then
         if self.flags.mvF then
@@ -67,9 +73,8 @@ function BaseEntity:update(dt)
 end
 
 function BaseEntity:draw()
-
     -- Draw modes
-    G.setColor(self.draw_col)
+    G.setColor(Colors.gray)
 
     -- Draw self (primitive circle)
     G.circle("fill", self.pos.x, self.pos.y, self.draw_rad, 32)
@@ -93,16 +98,22 @@ function BaseEntity:draw()
             end
             self.info_pr.y = self.pos.y
 
-            self.info_pr:print(string.format("(%g,%g)", self.pos.x, self.pos.y))
-            self.info_pr:print("vel=%g", self.vel:len())
-            self.info_pr:print("mvF=%s", self.flags.mvF)
-            self.info_pr:print("rL=%s", self.flags.rL)
-            self.info_pr:print("rR=%s", self.flags.rR)
-            self.info_pr:print("type=%s", type(self))
+            -- Add lines to info print region
+            self.info_pr:print({
+                string.format("(%g,%g)", self.pos.x, self.pos.y),
+                string.format("vel=%g", self.vel:len()),
+                string.format("mvF=%s", self.flags.mvF),
+                string.format("rL=%s", self.flags.rL),
+                string.format("rR=%s", self.flags.rR),
+            })
+
+            -- Draw print region if instance is of this class
+            if (self.__index == this.__index) then
+                self.info_pr:draw()
+            end
         end
     end
 
-    self.info_pr:draw()
 end
 
 return BaseEntity

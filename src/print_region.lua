@@ -1,3 +1,7 @@
+-- Other modules
+local Class = require "class"
+
+-- This module
 local PrintRegion = Class{}
 function PrintRegion:init(x, y, anchor, w, h)
     self.x = x or 0
@@ -13,8 +17,8 @@ function PrintRegion:print(s)
 
     -- Add item(s) to print to lines
     if _type == "table" then
-        for _, line in ipairs(s) do
-            table.insert(self.lines, tostring(line))
+        for k, v in pairs(s) do
+            table.insert(self.lines, tostring(v))
         end else
         table.insert(self.lines, tostring(s))
     end
@@ -86,5 +90,6 @@ function PrintRegion:draw()
     end
 end
 
+-- Return this module
 return PrintRegion
 

@@ -1,11 +1,13 @@
-local Class = require "class"
+-- Modules
 local BaseEntity = require "base_entity"
--- Vector = require "vector"
 
+-- This module
 local BaseParticle = Class{}
+local this = BaseParticle
 
 function BaseParticle:init(t, x, y)
     BaseEntity.init(self, t, x, y)
+    --[[
     self.life_init = 1
     self.life = self.life_init
 
@@ -17,6 +19,7 @@ function BaseParticle:init(t, x, y)
     elseif (i > 1/3) then
         self.flags.rR = true
     end
+    --]]
 end
 
 function BaseParticle:update(dt)
@@ -24,25 +27,33 @@ function BaseParticle:update(dt)
     BaseEntity.update(self, dt)
 
     -- Particle life
+    --[[
     self.life = self.life - 1 * dt
     if self.life <= 0 then
+        BaseEntity.destroy(self)
     end
+    --]]
 end
 
 function BaseParticle:draw()
-	-- Draw modes
-    self.draw_col.a = 255 * self.life / self.life_init
-    BaseEntity.draw(self)
+    BaseEntity:draw()
 
-	-- Debug draw
+    -- Debug draw
     if (Debug.enabled) then
         if (Debug.drawText) then
-			--self.info_pr:print("life=%s", self.life)
+            -- Add lines to info print region
+            self.info_pr:print({
+                string.format("life=%s", self.life),
+            })
+
+            -- Draw print region if instance is of this class
+            if (self.__index == this.__index) then
+                self.info_pr:draw()
+            end
         end
     end
 end
 
-BaseParticle:include(BaseEntity)
-
+-- Return module
 return BaseParticle
 
