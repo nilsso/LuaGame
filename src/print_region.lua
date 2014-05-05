@@ -4,8 +4,7 @@ local Class = require "class"
 -- This module
 local PrintRegion = Class{}
 function PrintRegion:init(x, y, anchor, w, h)
-    self.x = x or 0
-    self.y = y or 0
+    self.pos = Vector(x,y)
     self.anchor = anchor or "top-left"
     self.w = w or 200
     self.h = h or 100
@@ -29,38 +28,38 @@ function PrintRegion:draw()
 
     -- Anchor
     if (self.anchor == "top-left") then
-        px = self.x
-        py = self.y
+        px = self.pos.x
+        py = self.pos.y
     elseif (self.anchor == "top") then
-        px = self.x - self.w/2
-        py = self.y
+        px = self.pos.x - self.w/2
+        py = self.pos.y
     elseif (self.anchor == "top-right") then
-        px = self.x - self.w
-        py = self.y
+        px = self.pos.x - self.w
+        py = self.pos.y
     elseif (self.anchor == "left") then
-        px = self.x
-        py = self.y - self.h/2
+        px = self.pos.x
+        py = self.pos.y - self.h/2
     elseif (self.anchor == "center") then
-        px = self.x - self.w/2
-        py = self.y - self.h/2
+        px = self.pos.x - self.w/2
+        py = self.pos.y - self.h/2
     elseif (self.anchor == "right") then
-        px = self.x - self.w
-        py = self.y - self.h/2
+        px = self.pos.x - self.w
+        py = self.pos.y - self.h/2
     elseif (self.anchor == "bottom-left") then
-        px = self.x
-        py = self.y - self.h
+        px = self.pos.x
+        py = self.pos.y - self.h
     elseif (self.anchor == "bottom-center") then
-        px = self.x - self.w/2
-        py = self.y - self.h
+        px = self.pos.x - self.w/2
+        py = self.pos.y - self.h
     elseif (self.anchor == "bottom-right") then
-        px = self.x - self.w
-        py = self.y - self.h
+        px = self.pos.x - self.w
+        py = self.pos.y - self.h
     else
         assert(false, "Unknown anchor position")
     end
 
     -- Set draw modes
-    G.setColor(Colors.white)
+    G.setColor(Colors.white, 255)
 
     local i = 0
     for _, line in ipairs(self.lines) do
@@ -82,7 +81,7 @@ function PrintRegion:draw()
     if Debug.enabled then
         if Debug.drawGeom then
             -- Set draw modes
-            G.setColor(Colors.blue)
+            G.setColor(Colors.blue, 255)
             G.setLineWidth(1)
 
             G.rectangle("line", px, py, self.w, self.h)

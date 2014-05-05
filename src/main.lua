@@ -5,22 +5,10 @@ W.w = W.getWidth()
 W.h = W.getHeight()
 
 -- -----------------------------------------------
--- Libraries & Utilities
--- -----------------------------------------------
--- Libraries
-Gamestate = require "gamestate"
-
 -- Utilities
+-- -----------------------------------------------
+
 Colors = {
-    white =     {255,   255,    255,    255},
-    ltgray =    {191,   191,    191,    255},
-    gray =      {127,   127,    127,    255},
-    dkgray =    {64,    64,     64,     255},
-    black =     {0,     0,      0,      255},
-    red =       {255,   0,      0,      255},
-    green =     {0,     255,    0,      255},
-    blue =      {0,     0,      255,    255}
-    --[[
     white =     {255,   255,    255},
     ltgray =    {191,   191,    191},
     gray =      {127,   127,    127},
@@ -29,22 +17,27 @@ Colors = {
     red =       {255,   0,      0},
     green =     {0,     255,    0},
     blue =      {0,     0,      255}
-    --]]
 }
 
 Debug = {
     enabled = false,
-    drawText = true,
-    drawGeom = true
+    draw_text = true,
+    draw_geom = true
 }
 
 -- -----------------------------------------------
--- Prototypes
+-- Required Modules
 -- -----------------------------------------------
+-- HUMP
+Class = require "class"
+Gamestate = require "gamestate"
+Vector = require "vector"
+
+-- Prototypes
 PrintRegion = require "print_region"
 BaseState = require "base_state"
 BaseButton = require "base_button"
-BaseEntity = require "base_entity"
+BaseVectorEntity = require "base_vector_entity"
 BaseParticle = require "base_particle"
 
 -- -----------------------------------------------
@@ -67,13 +60,13 @@ game.keybinds = {
     ["z"] = {{},
         function()
             if Debug.enabled then
-                Debug.drawGeom = not Debug.drawGeom
+                Debug.draw_geom = not Debug.draw_geom
             end
         end},
     ["x"] = {{},
         function()
             if Debug.enabled then
-                Debug.drawText = not Debug.drawText
+                Debug.draw_text = not Debug.draw_text
             end
         end},
     ["c"] = {{},
@@ -86,8 +79,14 @@ do
     local button = BaseButton("Particles", 55, W.h/2)
 
     button.func_down = function()
-        BaseParticle(game.entities, W.w/2, W.h/2)
+        for i=1, 5-math.random()*4 do
+            local particle = BaseParticle()
+            particle.pos.x = W.w/2
+            particle.pos.y = W.h/2
+            particle:register(game.entities)
+        end
     end
+    button.func_down_cd = 0.25
 
     table.insert(game.entities, button)
 end

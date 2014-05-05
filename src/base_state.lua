@@ -1,13 +1,16 @@
--- Other modules
-local Class = require "class"
-
--- This module
+-- -----------------------------------------------
+-- Class declaration
+-- -----------------------------------------------
 local BaseState = Class{}
+local this = BaseState
 
+-- -----------------------------------------------
+-- Function definitions
+-- -----------------------------------------------
 function BaseState:init()
     -- Entity list and print region
     self.entities = self.entities or setmetatable({}, {__mode = "k"})
-    self.entities_pr = PrintRegion(W.w - 5, 5, "top-right", 200, W.h - 10)
+    self.entities_pr = PrintRegion(W.w-5, 5, "top-right", 200, W.h-10)
 
     -- Info print region
     self.info_pr = PrintRegion(5, 5, "top-left", 200, W.h - 10)
@@ -70,9 +73,9 @@ function BaseState:draw()
     -- Debug draw
     if Debug.enabled then
         -- Geometry
-        if Debug.drawGeom then
+        if Debug.draw_geom then
             -- Set draw modes
-            G.setColor(Colors.blue)
+            G.setColor(Colors.blue, 255)
             G.setLineWidth(1)
 
             -- Window dividers
@@ -81,8 +84,8 @@ function BaseState:draw()
         end
 
         -- Text
-        if Debug.drawText then
-            G.setColor(Colors.white)
+        if Debug.draw_text then
+            G.setColor(Colors.white, 255)
 
             -- Entity print region
             self.entities_pr:print({

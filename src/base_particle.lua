@@ -1,46 +1,49 @@
--- Modules
-local BaseEntity = require "base_entity"
-
--- This module
-local BaseParticle = Class{}
+-- -----------------------------------------------
+-- Class declaration
+-- -----------------------------------------------
+local BaseParticle = Class{__includes = BaseVectorEntity}
 local this = BaseParticle
 
-function BaseParticle:init(t, x, y)
-    BaseEntity.init(self, t, x, y)
-    --[[
+-- -----------------------------------------------
+-- Function definitions
+-- -----------------------------------------------
+function BaseParticle:init(x, y)
+    BaseVectorEntity.init(self, x, y)
+
     self.life_init = 1
     self.life = self.life_init
 
-    self.vel = Vector(1, 0):rotated(math.random()*math.pi*2)*math.random(60, 200)
+    self.dir = Vector(1, 0):rotated(math.random()*math.pi*2)
+    self.vel = self.dir*math.random(60, 200)
 
     local i = math.random()
     if (i > 2/3) then
-        self.flags.rL = true
+        self.mv_flags.r_l = true
     elseif (i > 1/3) then
-        self.flags.rR = true
+        self.mv_flags.r_r = true
     end
-    --]]
 end
 
-function BaseParticle:update(dt)
-    -- Parent function
-    BaseEntity.update(self, dt)
+function this:update(dt)
+    BaseVectorEntity.update(self, dt)
 
     -- Particle life
-    --[[
     self.life = self.life - 1 * dt
     if self.life <= 0 then
-        BaseEntity.destroy(self)
+        BaseVectorEntity.destroy(self)
     end
-    --]]
 end
 
 function BaseParticle:draw()
-    BaseEntity:draw()
+    -- Draw mode
+    if (self.__index == this.__index) then
+        G.setColor(self.draw_col[1], self.draw_col[2], self.draw_col[3], 255*self.life/self.life_init)
+    end
+    BaseVectorEntity.draw(self)
 
     -- Debug draw
     if (Debug.enabled) then
-        if (Debug.drawText) then
+        if (Debug.draw_text) then
             -- Add lines to info print region
             self.info_pr:print({
                 string.format("life=%s", self.life),
@@ -54,6 +57,5 @@ function BaseParticle:draw()
     end
 end
 
--- Return module
 return BaseParticle
 
