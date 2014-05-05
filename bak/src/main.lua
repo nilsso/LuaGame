@@ -75,8 +75,9 @@ game.keybinds = {
         end}
 }
 
-if false then
+do
     local button = BaseButton("Particles", 55, W.h/2)
+
     button.func_down = function()
         for i=1, 5-math.random()*4 do
             local particle = BaseParticle()
@@ -88,8 +89,6 @@ if false then
     button.func_down_cd = 0.25
 
     table.insert(game.entities, button)
-else
-    local entity = BaseEntity(W.h/2, W.h/2)
 end
 
 -- -----------------------------------------------
