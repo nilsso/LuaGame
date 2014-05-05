@@ -82,14 +82,14 @@ game.keybinds = {
         end}
 }
 
-do
+if false then
     local button = BaseButton("Particles", 55, W.h/2)
-
     button.func_down = function()
-        BaseParticle(game.entities, W.w/2, W.h/2)
+        --BaseParticle(game.entities, W.w/2, W.h/2)
     end
-
     table.insert(game.entities, button)
+else
+    local entity = BaseEntity(W.h/2, W.h/2)
 end
 
 -- -----------------------------------------------

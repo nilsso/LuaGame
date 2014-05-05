@@ -2,74 +2,72 @@
 local Class = require "class"
 
 -- This module
-local BaseEntity = Class{}
+local BaseEntity = Class{
+    table,
+
+    pos,
+    vel = Vector(0, 0),
+    vel_max = 100,
+    accel = 60,
+
+    dir = Vector(1, 0),
+    phi = 1,
+
+    mvFlags = {
+        mvL = false,
+        mvR = false,
+        mvU = false,
+        mvD = false
+    },
+
+    info_pr
+}
 local this = BaseEntity
 
-function BaseEntity:init(t, x, y)
-    self.table = t
-    self.table[self] = self
-
+function BaseEntity:init(x, y)
     self.pos = Vector(x, y)
-
-    self.vel = Vector(0, 0)
-    self.vel_max = 100
-    self.accel = 60
-
-    self.dir = Vector(1, 0)
-    self.phi = 1
-
-    self.flags = {
-        mvF = false,
-        mvB = false,
-        rL = false,
-        rR = false
-    }
-
-    self.draw_rad = 8
-    self.draw_col = Colors.gray
-
     self.info_pr = PrintRegion()
 end
 
-function BaseEntity:destroy()
+function BaseEntity:register(t)
+    assert(not self.table, string.format("Instance already registered to %s", self.table)))
+
+    self.table = t
+    self.table[self] = self
+end
+
+function BaseEntity:deregister()
+    assert(self.table, "Instance not registered.")
+
     self.table[self] = nil
+end
+
+function BaseEntity:destroy()
+    self.deregister()
 end
 
 function BaseEntity:update(dt)
     -- Input
-    self.flags.mvF = K.isDown('w')
-    self.flags.rL = K.isDown('a')
-    self.flags.rR = K.isDown('d')
+    -- self.mvFlags.mvF = K.isDown('w')
+    -- self.mvFlags.rL = K.isDown('a')
+    -- self.mvFlags.rR = K.isDown('d')
 
-    if (self.flags.mvF or self.flags.mvB) and not (self.flags.mvF and self.flags.mvB) then
-        if self.flags.mvF then
-            self.vel = self.vel + self.dir * self.accel * dt
+    if (self.mvFlags.mvL or self.mvFlags.mvR) and not (self.mvFlags.mvL and self.mvFlags.mvR) then
+        if self.mvFlags.mvL then
+            self.x = x-10*dt
         else
-        end
-    elseif self.vel:len() ~= 0 then
-        if self.vel:len() > 0 then
-            local delta = self.dir * self.accel * dt
-            if self.vel:len() < delta:len() then
-                self.vel = Vector(0, 0)
-            else
-                self.vel = self.vel - delta
-            end
+            self.x = x+10*dt
         end
     end
 
-    if (self.flags.rL or self.flags.rR) and not (self.flags.rL and self.flags.rR) then
-        if self.flags.rL then
-            self.vel = self.vel:rotated(-self.phi * dt)
+    if (self.mvFlags.mvU or self.mvFlags.mvD) and not (self.mvFlags.mvU and self.mvFlags.mvD) then
+        if self.mvFlags.mvFlags.mvU then
+            self.y = y-10*dt
         else
-            self.vel = self.vel:rotated(self.phi * dt)
+            self.y = y+10*dt
         end
     end
 
-    if self.vel:len() ~= 0 then
-        self.dir = self.vel:normalized()
-    end
-
-    self.pos = self.pos + self.vel * dt
 end
 
 function BaseEntity:draw()
@@ -102,9 +100,9 @@ function BaseEntity:draw()
             self.info_pr:print({
                 string.format("(%g,%g)", self.pos.x, self.pos.y),
                 string.format("vel=%g", self.vel:len()),
-                string.format("mvF=%s", self.flags.mvF),
-                string.format("rL=%s", self.flags.rL),
-                string.format("rR=%s", self.flags.rR),
+                string.format("mvF=%s", self.mvFlags.mvF),
+                string.format("rL=%s", self.mvFlags.rL),
+                string.format("rR=%s", self.mvFlags.rR),
             })
 
             -- Draw print region if instance is of this class

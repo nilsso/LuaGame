@@ -1,4 +1,5 @@
 -- Modules
+local Class = require "class"
 local BaseEntity = require "base_entity"
 
 -- This module
