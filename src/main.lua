@@ -37,7 +37,7 @@ Vector = require "vector"
 PrintRegion = require "print_region"
 BaseState = require "base_state"
 BaseButton = require "base_button"
-BaseVectorEntity = require "base_vector_entity"
+BaseEntity = require "base_entity"
 BaseParticle = require "base_particle"
 
 -- -----------------------------------------------

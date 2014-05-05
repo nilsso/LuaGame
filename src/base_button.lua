@@ -2,6 +2,8 @@
 -- Class definition
 -- -----------------------------------------------
 local BaseButton = Class{
+    table,
+
     pos,
     dim,
     bounds = {
@@ -42,6 +44,9 @@ function this:init(s, x, y, w, h)
 
     self.info_pr = PrintRegion()
 end
+
+function this:register(t)
+    assert
 
 function this:calcBounds()
     self.bounds.left = self.pos.x-self.dim.x/2
@@ -133,5 +138,5 @@ function this:draw()
     end
 end
 
-return BaseButton
+return this
 

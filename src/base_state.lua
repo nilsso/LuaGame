@@ -61,7 +61,9 @@ end
 
 function BaseState:update(dt)
     for k, v in pairs(self.entities) do
-        v:update(dt)
+        if v.update then
+            v:update(dt)
+        end
     end
 end
 

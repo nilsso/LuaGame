@@ -1,59 +1,42 @@
 -- -----------------------------------------------
 -- Class declaration
 -- -----------------------------------------------
-local BaseVectorEntity = Class{
+local BaseEntity = Class{
+    __includes = BaseEntityStatic,
     table,
 
-    pos,
     dir,
     vel,
     velMax = 100,
-    accel = 60,
+    accel = 200,
     phi = math.pi/2,
 
     mv_flags = {
-        mv_f = false,
-        mv_b = false,
-        r_l = false,
-        r_r = false
+        --
+        mv_l = false,   -- Left
+        mv_r = false,   -- Right
+        mv_u = false,   -- Up
+        mv_d = false,   -- Down
+
+        --
+        r_l = false,    -- Rotate left (counter-clockwise)
+        r_r = false,    -- Rotate right (clockwise)
+        mv_f = false,   -- Forward
+        mv_b = false,   -- Backwards
+        mv_p = false,   -- Port
+        mv_s = false    -- Starboard
     },
-
-    draw_rad = 8,
-    draw_col = Colors.gray,
-
-    info_pr
 }
-local this = BaseVectorEntity
+local this = BaseEntity
 
 -- -----------------------------------------------
 -- Function definitions
 -- -----------------------------------------------
 function this:init(x, y)
-    -- Table
-    self.table = nil
+    BaseEntityStatic.init(self, x, y)
 
-    --
-    self.pos = Vector(x,y)
     self.dir = Vector(1,0)
     self.vel = Vector(0,0)
-
-    self.info_pr = PrintRegion()
-end
-
-function this:register(t)
-    assert(not self.table, "Cannot register, already registered.")
-
-    self.table = t
-    self.table[self] = self
-end
-
-function this:deregister()
-    assert(self.table, "Cannot deregister, not registered yet.")
-    self.table[self] = nil
-end
-
-function this:destroy()
-    self:deregister()
 end
 
 local function xor(a, b)
@@ -61,11 +44,19 @@ local function xor(a, b)
 end
 
 function this:update(dt)
-    -- Input
-    self.mv_flags.mv_f = K.isDown('w')
-    self.mv_flags.mv_b = K.isDown('s')
-    self.mv_flags.r_l = K.isDown('a')
-    self.mv_flags.r_r = K.isDown('d')
+    -- Move left/right
+    if xor(self.mv_flags.mv_l, self.mv_flags.mv_r) then
+        if self.mv_flags.mv_l then
+        else
+        end
+    end
+
+    -- Move up/down
+    if xor(self.mv_flags.mv_u, self.mv_flags.mv_d) then
+        if self.mv_flags.mv_u then
+        else
+        end
+    end
 
     -- Rotate
     if xor(self.mv_flags.r_l, self.mv_flags.r_r) then
@@ -92,6 +83,13 @@ function this:update(dt)
             self.vel = self.vel-delta
         else
             self.vel = Vector(0,0)
+        end
+    end
+
+    -- Move port/starboard
+    if xor(self.mv_flags.mv_p, self.mv_flags.mv_s) then
+        if self.mv_flags.mv_p then
+        else
         end
     end
 

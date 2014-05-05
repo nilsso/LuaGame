@@ -1,14 +1,14 @@
 -- -----------------------------------------------
 -- Class declaration
 -- -----------------------------------------------
-local BaseParticle = Class{__includes = BaseVectorEntity}
+local BaseParticle = Class{__includes = BaseEntity}
 local this = BaseParticle
 
 -- -----------------------------------------------
 -- Function definitions
 -- -----------------------------------------------
 function BaseParticle:init(x, y)
-    BaseVectorEntity.init(self, x, y)
+    BaseEntity.init(self, x, y)
 
     self.life_init = 1
     self.life = self.life_init
@@ -25,12 +25,12 @@ function BaseParticle:init(x, y)
 end
 
 function this:update(dt)
-    BaseVectorEntity.update(self, dt)
+    BaseEntity.update(self, dt)
 
     -- Particle life
     self.life = self.life - 1 * dt
     if self.life <= 0 then
-        BaseVectorEntity.destroy(self)
+        BaseEntity.destroy(self)
     end
 end
 
@@ -39,7 +39,7 @@ function BaseParticle:draw()
     if (self.__index == this.__index) then
         G.setColor(self.draw_col[1], self.draw_col[2], self.draw_col[3], 255*self.life/self.life_init)
     end
-    BaseVectorEntity.draw(self)
+    BaseEntity.draw(self)
 
     -- Debug draw
     if (Debug.enabled) then
@@ -57,5 +57,5 @@ function BaseParticle:draw()
     end
 end
 
-return BaseParticle
+return this
 
