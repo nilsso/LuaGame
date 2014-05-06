@@ -8,6 +8,14 @@ W.h = W.getHeight()
 -- Utilities
 -- -----------------------------------------------
 
+function ShallowCopy(t)
+    local t2 = {}
+    for k, v in pairs(t) do
+        t2[k] = v
+    end
+    return t2
+end
+
 Colors = {
     white =     {255,   255,    255},
     ltgray =    {191,   191,    191},
@@ -21,8 +29,10 @@ Colors = {
 
 Debug = {
     enabled = false,
+    draw_geom = true,
     draw_text = true,
-    draw_geom = true
+    draw_text_verbose = false,
+    draw_pr_bounds = false
 }
 
 -- -----------------------------------------------
@@ -36,6 +46,7 @@ Vector = require "vector"
 -- Prototypes
 PrintRegion = require "print_region"
 BaseState = require "base_state"
+BaseEntityStatic = require "base_entity_static"
 BaseButton = require "base_button"
 BaseEntity = require "base_entity"
 BaseParticle = require "base_particle"
@@ -75,22 +86,23 @@ game.keybinds = {
         end}
 }
 
-if false then
-    local button = BaseButton("Particles", 55, W.h/2)
-    button.func_down = function()
-        for i=1, 5-math.random()*4 do
-            local particle = BaseParticle()
-            particle.pos.x = W.w/2
-            particle.pos.y = W.h/2
-            particle:register(game.entities)
-        end
-    end
-    button.func_down_cd = 0.25
+-- local button = BaseButton("Particles", 55, W.h/2)
+-- button.func_down = function()
+--     for i=1, 5-math.random()*4 do
+--         local particle = BaseParticle()
+--         particle.pos.x = W.w/2
+--         particle.pos.y = W.h/2
+--         particle:register(game.entities)
+--     end
+-- end
+-- button.func_down_cd = 0.25
 
-    table.insert(game.entities, button)
-else
-    local entity = BaseEntity(W.h/2, W.h/2)
-end
+-- table.insert(game.entities, button)
+
+
+local button = BaseButton("Test", W.w/2, W.h/2)
+button:register(game.entities)
+
 
 -- -----------------------------------------------
 -- Callbacks
@@ -104,5 +116,6 @@ end
 function love.update(dt)
     W.w = W.getWidth()
     W.h = W.getHeight()
+    G.font = G.getFont()
 end
 

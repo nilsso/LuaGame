@@ -3,10 +3,9 @@
 -- -----------------------------------------------
 local BaseEntity = Class{
     __includes = BaseEntityStatic,
-    table,
 
-    dir,
-    vel,
+    dir = Vector(1,0),
+    vel = Vector(0,0),
     velMax = 100,
     accel = 200,
     phi = math.pi/2,
@@ -34,9 +33,6 @@ local this = BaseEntity
 -- -----------------------------------------------
 function this:init(x, y)
     BaseEntityStatic.init(self, x, y)
-
-    self.dir = Vector(1,0)
-    self.vel = Vector(0,0)
 end
 
 local function xor(a, b)
