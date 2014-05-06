@@ -4,11 +4,11 @@
 local BaseState = Class{
     entities,
 
-    keybinds = {},
+    keybinds,
 
     colors = {
-        dbg_geom = ShallowCopy(Colors.blue),
-        dbg_text = ShallowCopy(Colors.white)
+        dbg_geom = Colors.blue,
+        dbg_text = Colors.white
     },
 
     entitire_pr,
@@ -20,12 +20,13 @@ local this = BaseState
 -- Function definitions
 -- -----------------------------------------------
 function this:init()
-    -- Entity list
     self.entities = self.entities or setmetatable({}, {__mode = "k"})
 
+    self.keybinds = self.keybinds or {}
+
     -- Print regions
-    self.info_pr = PrintRegion(5, 5, "top-left")
-    self.entities_pr = PrintRegion(W.w-5, 5, "top-right")
+    self.info_pr = self.info_pr or PrintRegion(5, 5, "top-left")
+    self.entities_pr = self.entities_pr or PrintRegion(W.w-5, 5, "top-right")
 end
 
 function this:entityCount(e)
@@ -64,10 +65,18 @@ function this:keypressed(key)
     end
 end
 
-function this:mousepressed(x, y, key)
+function this:mousepressed(x,y,key)
     for k, v in pairs(self.entities) do
         if v.mousepressed and v:capturing() then
             v:mousepressed(key)
+        end
+    end
+end
+
+function this:mousereleased(x,y,key)
+    for k, v in pairs(self.entities) do
+        if v.mousereleased and v:capturing() then
+            v:mousereleased(key)
         end
     end
 end
@@ -140,11 +149,11 @@ function this:drawDebugText()
     self.entities_pr.pos.x = W.w-5
     self.entities_pr:print(string.format("ENTITIES (count=%d)", self:entityCount()))
     for k, v in pairs(self.entities) do
-        self.entities_pr:print(v)
+        self.entities_pr:print(self)
     end
     self.entities_pr:draw()
 end
 
 -- Module
-return BaseState
+return this
 

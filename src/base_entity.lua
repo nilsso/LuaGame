@@ -35,10 +35,6 @@ function this:init(x, y)
     BaseEntityStatic.init(self, x, y)
 end
 
-local function xor(a, b)
-    return (a or b) and not (a and b)
-end
-
 function this:update(dt)
     -- Move left/right
     if xor(self.mv_flags.mv_l, self.mv_flags.mv_r) then

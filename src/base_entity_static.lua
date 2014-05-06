@@ -3,22 +3,17 @@
 -- -----------------------------------------------
 local BaseEntityStatic = Class{
     __includes = nil,
-    table,
+    table = nil,
 
-    pos = Vector(0,0),
+    pos = Vector(W.w/2,W.h/2),
     dim = Vector(16,16),
 
-    bounds = {
-        l,
-        t,
-        r,
-        b
-    },
+    bounds,
 
     colors = {
-        back = ShallowCopy(Colors.gray),
-        dbg_geom = ShallowCopy(Colors.blue),
-        dbg_text = ShallowCopy(Colors.white)
+        back = Colors.gray,
+        dbg_geom = Colors.blue,
+        dbg_text = Colors.white
     },
 
     info_pr
@@ -29,8 +24,21 @@ local this = BaseEntityStatic
 -- Function definitions
 -- -----------------------------------------------
 function this:init(x, y, w, h)
-    self.pos = Vector(x,y)
-    self.dim = Vector(w or 16, h or 16)
+
+    self.pos = Vector(
+        x or this.pos.x,
+        y or this.pos.y)
+    self.dim = Vector(
+        w or this.dim.x,
+        h or this.dim.y)
+
+    self.bounds = {l,t,r,b}
+
+    self.colors = {
+        back = ShallowCopy(this.colors.back),
+        dbg_geom = ShallowCopy(this.colors.dbg_geom),
+        dbg_text = ShallowCopy(this.colors.dbg_text)
+    }
     self.info_pr = PrintRegion()
 end
 
@@ -74,7 +82,7 @@ function this:update(dt)
 end
 
 function this:draw()
-    -- Draw mode
+    -- Set color
     G.setColor(self.colors.back)
 
     -- Draw primative
@@ -105,13 +113,13 @@ function this:drawDebugText()
         self.info_pr.pos.x = self.bounds.l-5
         self.info_pr.anchor = "top-right"
     end
-    self.info_pr.pos.y = self.pos.y
+    self.info_pr.pos.y = self.bounds.t
 
     -- Add lines to print region
     self.info_pr:print(string.format("pos=(%g,%g)", self.pos.x, self.pos.y))
     self.info_pr:print(string.format("dim=(%i,%i)", self.dim.x, self.dim.y))
 
-    -- Draw print region if instance is of this class
+    -- Draw print region if instance is of BaseEntityStatic class
     if (self.__index == this.__index) then
         self.info_pr:draw()
     end

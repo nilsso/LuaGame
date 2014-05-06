@@ -8,6 +8,10 @@ W.h = W.getHeight()
 -- Utilities
 -- -----------------------------------------------
 
+function xor(a, b)
+    return (a or b) and not (a and b)
+end
+
 function ShallowCopy(t)
     local t2 = {}
     for k, v in pairs(t) do
@@ -32,7 +36,7 @@ Debug = {
     draw_geom = true,
     draw_text = true,
     draw_text_verbose = false,
-    draw_pr_bounds = false
+    draw_pr_bounds = true
 }
 
 -- -----------------------------------------------
@@ -86,7 +90,6 @@ game.keybinds = {
         end}
 }
 
--- local button = BaseButton("Particles", 55, W.h/2)
 -- button.func_down = function()
 --     for i=1, 5-math.random()*4 do
 --         local particle = BaseParticle()
@@ -95,14 +98,21 @@ game.keybinds = {
 --         particle:register(game.entities)
 --     end
 -- end
--- button.func_down_cd = 0.25
 
--- table.insert(game.entities, button)
+local entity1 = BaseEntityStatic()
+entity1.pos = Vector(W.w/2-8,W.h/2-32)
+entity1:register(game.entities)
 
+local entity2 = BaseEntityStatic()
+entity2.pos = Vector(W.w/2+8,W.h/2+32)
+entity2:register(game.entities)
 
-local button = BaseButton("Test", W.w/2, W.h/2)
-button:register(game.entities)
+local button1 = BaseButton("Button 1",55,W.h/2)
+button1:register(game.entities)
 
+button1.func.p = function() print("PRESS") end
+button1.func.r = function() print("RELEASE") end
+button1.func.d = function() print("DOWN") end
 
 -- -----------------------------------------------
 -- Callbacks

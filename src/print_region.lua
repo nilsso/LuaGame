@@ -2,10 +2,13 @@
 -- Class declaration
 -- -----------------------------------------------
 local PrintRegion = Class{
-    pos = Vector(0,0),
+    lines,
+
+    pos,
+
     anchor = "top-left",
-    lines = {},
-    w = 0,
+
+    w,
     w_max = 100
 }
 local this = PrintRegion
@@ -14,9 +17,14 @@ local this = PrintRegion
 -- Function definitions
 -- -----------------------------------------------
 function this:init(x, y, anchor, w_max)
-    self.pos = Vector(x,y)
-    self.anchor = anchor or self.anchor
-    self.w_max = w_max or self.w_max
+    self.lines = {}
+
+    self.pos = Vector(x or 0, y or 0)
+
+    self.anchor = anchor or this.anchor
+
+    self.w = 0
+    self.w_max = w_max or this.w_max
 end
 
 function this:print(s)
@@ -72,6 +80,5 @@ function this:draw()
     self.w = 0
 end
 
--- Return this module
-return PrintRegion
+return this
 

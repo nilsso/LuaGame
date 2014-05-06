@@ -1,13 +1,15 @@
 -- -----------------------------------------------
 -- Class declaration
 -- -----------------------------------------------
-local BaseParticle = Class{__includes = BaseEntity}
+local BaseParticle = Class{
+    __includes = BaseEntity
+}
 local this = BaseParticle
 
 -- -----------------------------------------------
 -- Function definitions
 -- -----------------------------------------------
-function BaseParticle:init(x, y)
+function this:init(x, y)
     BaseEntity.init(self, x, y)
 
     self.life_init = 1
@@ -34,7 +36,7 @@ function this:update(dt)
     end
 end
 
-function BaseParticle:draw()
+function this:draw()
     -- Draw mode
     if (self.__index == this.__index) then
         G.setColor(self.draw_col[1], self.draw_col[2], self.draw_col[3], 255*self.life/self.life_init)
