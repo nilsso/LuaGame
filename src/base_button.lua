@@ -53,12 +53,6 @@ function this:init(s,x,y,w,h)
 
     self.state = this.states.NORMAL
 
-    self.flags = {
-        p,
-        r,
-        d
-    }
-
     self.colors = {
         back_n = ShallowCopy(BaseButton.colors.back_n),
         back_h = ShallowCopy(BaseButton.colors.back_h),
@@ -95,7 +89,7 @@ function BaseButton:update(dt)
         end
     end
 
-    -- Update flags
+    -- Update state
     if not isDown then
         if not (self.state == this.states.DOWN or self.state == this.states.PRESSED) then
             self.state = this.states.NORMAL
