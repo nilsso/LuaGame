@@ -96,17 +96,22 @@ function this:draw()
         if v.draw then
             v:draw()
         end
+    end
 
-        -- Entity debug drawing
-        if Debug.enabled then
-            -- Debug geometry
-            if Debug.draw_geom and v.drawDebugGeom then
-                v:drawDebugGeom()
+    if Debug.enabled then
+        if Debug.draw_geom then
+            for k, v in pairs(self.entities) do
+                if Debug.draw_geom and v.drawDebugGeom then
+                    v:drawDebugGeom()
+                end
             end
+        end
 
-            -- Debug text
-            if Debug.draw_text and v.drawDebugText then
-                v:drawDebugText()
+        if Debug.draw_text then
+            for k, v in pairs(self.entities) do
+                if Debug.draw_text and v.drawDebugText then
+                    v:drawDebugText()
+                end
             end
         end
     end

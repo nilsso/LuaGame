@@ -11,9 +11,7 @@ local BaseEntityStatic = Class{
     bounds,
 
     colors = {
-        back = Colors.gray,
-        dbg_geom = Colors.blue,
-        dbg_text = Colors.white
+        back = Colors.gray
     },
 
     info_pr
@@ -36,10 +34,10 @@ function this:init(x, y, w, h)
 
     self.colors = {
         back = ShallowCopy(this.colors.back),
-        dbg_geom = ShallowCopy(this.colors.dbg_geom),
-        dbg_text = ShallowCopy(this.colors.dbg_text)
     }
     self.info_pr = PrintRegion()
+
+    self:updateBounds()
 end
 
 function this:register(t)
@@ -92,9 +90,6 @@ function this:draw()
 end
 
 function this:drawDebugGeom()
-    -- Draw mode
-    G.setColor(self.colors.dbg_geom)
-
     -- Bounding rectangle
     G.rectangle("line",
         self.bounds.l, self.bounds.t,
@@ -102,18 +97,38 @@ function this:drawDebugGeom()
 end
 
 function this:drawDebugText()
-    -- Draw mode
-    G.setColor(self.colors.dbg_text)
-
     -- Update print region coordinates
-    if (self.pos.x < W.w/2) then
-        self.info_pr.pos.x = self.bounds.r+5
-        self.info_pr.anchor = "top-left"
+    if self:capturing() then
+        local x, y = M.getPosition()
+
+        -- Offset from mouse
+        if (x < W.w/2) then
+            self.info_pr.pos.x = x+10
+            if (y < W.h/2) then
+                self.info_pr.anchor = "top-left"
+            else
+                self.info_pr.anchor = "bottom-left"
+            end
+        else
+            self.info_pr.pos.x = x-10
+            if (y < W.h/2) then
+                self.info_pr.anchor = "top-right"
+            else
+                self.info_pr.anchor = "bottom-right"
+            end
+        end
+        self.info_pr.pos.y = y
     else
-        self.info_pr.pos.x = self.bounds.l-5
-        self.info_pr.anchor = "top-right"
+        -- Offset from object
+        if (self.pos.x < W.w/2) then
+            self.info_pr.pos.x = self.bounds.r+5
+            self.info_pr.anchor = "top-left"
+        else
+            self.info_pr.pos.x = self.bounds.l-5
+            self.info_pr.anchor = "top-right"
+        end
+        self.info_pr.pos.y = self.bounds.t
     end
-    self.info_pr.pos.y = self.bounds.t
 
     -- Add lines to print region
     self.info_pr:print(string.format("pos=(%g,%g)", self.pos.x, self.pos.y))

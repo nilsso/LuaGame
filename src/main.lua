@@ -21,22 +21,22 @@ function ShallowCopy(t)
 end
 
 Colors = {
-    white =     {255,   255,    255},
-    ltgray =    {191,   191,    191},
-    gray =      {127,   127,    127},
-    dkgray =    {64,    64,     64},
-    black =     {0,     0,      0},
-    red =       {255,   0,      0},
-    green =     {0,     255,    0},
-    blue =      {0,     0,      255}
+    white =     {255, 255, 255},
+    ltgray =    {191, 191, 191},
+    gray =      {127, 127, 127},
+    dkgray =    {64, 64, 64},
+    black =     {0, 0, 0},
+    red =       {255, 0, 0},
+    green =     {0, 255, 0},
+    yellow =    {255, 255, 0},
+    blue =      {0, 0, 255}
 }
 
 Debug = {
     enabled = false,
     draw_geom = true,
     draw_text = true,
-    draw_text_verbose = false,
-    draw_pr_bounds = true
+    draw_text_verbose = false
 }
 
 -- -----------------------------------------------
@@ -99,20 +99,78 @@ game.keybinds = {
 --     end
 -- end
 
-local entity1 = BaseEntityStatic()
-entity1.pos = Vector(W.w/2-8,W.h/2-32)
-entity1:register(game.entities)
+do
+    local entity1 = BaseEntityStatic()
+    entity1.pos = Vector(W.w/2,W.h/2)
+    entity1:register(game.entities)
 
-local entity2 = BaseEntityStatic()
-entity2.pos = Vector(W.w/2+8,W.h/2+32)
-entity2:register(game.entities)
+    local d = 200
 
-local button1 = BaseButton("Button 1",55,W.h/2)
-button1:register(game.entities)
+    local left = function(dt) entity1.pos.x = entity1.pos.x-d*dt end
+    local right = function(dt) entity1.pos.x = entity1.pos.x+d*dt end
+    local up = function(dt) entity1.pos.y = entity1.pos.y-d*dt end
+    local down = function(dt) entity1.pos.y = entity1.pos.y+d*dt end
 
-button1.func.p = function() print("PRESS") end
-button1.func.r = function() print("RELEASE") end
-button1.func.d = function() print("DOWN") end
+    local buttonLeftUp = BaseButton("Left-Up", W.w/2-105, W.h-65)
+    buttonLeftUp.func.d = {left, up}
+    buttonLeftUp.func.d_cd = 0
+    buttonLeftUp:register(game.entities)
+
+    local buttonUp = BaseButton("Up", W.w/2, W.h-65)
+    buttonUp.func.d = up
+    buttonUp.func.d_cd = 0
+    buttonUp.buttons.keys = {"up"}
+    buttonUp:register(game.entities)
+
+    local buttonRightUp = BaseButton("Right-Up", W.w/2+105, W.h-65)
+    buttonRightUp.func.d = {right, up}
+    buttonRightUp.func.d_cd = 0
+    buttonRightUp:register(game.entities)
+
+    local buttonLeft = BaseButton("Left", W.w/2-105, W.h-40)
+    buttonLeft.func.d = left
+    buttonLeft.func.d_cd = 0
+    buttonLeft.buttons.keys = {"left"}
+    buttonLeft:register(game.entities)
+
+    local buttonRight = BaseButton("Right", W.w/2+105, W.h-40)
+    buttonRight.func.d = right
+    buttonRight.func.d_cd = 0
+    buttonRight.buttons.keys = {"right"}
+    buttonRight:register(game.entities)
+
+    local buttonLeftDown = BaseButton("Left-Down", W.w/2-105, W.h-15)
+    buttonLeftDown.func.d = {left, down}
+    buttonLeftDown.func.d_cd = 0
+    buttonLeftDown:register(game.entities)
+
+    local buttonDown = BaseButton("Down", W.w/2, W.h-15)
+    buttonDown.func.d = down
+    buttonDown.func.d_cd = 0
+    buttonDown.buttons.keys = {"down"}
+    buttonDown:register(game.entities)
+
+    local buttonRightDown = BaseButton("Right-Down",W.w/2+105, W.h-15)
+    buttonRightDown.func.d = {right, down}
+    buttonRightDown.func.d_cd = 0
+    buttonRightDown:register(game.entities)
+end
+
+local buttonPrint = BaseButton("Print Button Functions",55,W.h-20,100,30)
+buttonPrint.func.p = function() print("PRESSED") end
+buttonPrint.func.r = function() print("RELEASED") end
+buttonPrint.func.d = function() print("DOWN") end
+buttonPrint.buttons.keys = {" "}
+buttonPrint:register(game.entities)
+
+local buttonParticles = BaseButton("Particles",55,buttonPrint.bounds.t-15)
+buttonParticles:register(game.entities)
+
+local buttonTest1 = BaseButton("Test",W.w/4,W.h/2-15)
+buttonTest1:register(game.entities)
+
+local buttonTest2 = BaseButton("Test",W.w/4,W.h/2+15)
+buttonTest2:register(game.entities)
 
 -- -----------------------------------------------
 -- Callbacks
