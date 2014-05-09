@@ -8,7 +8,11 @@ Managing the game state system are state objects with their own list of entities
 
 [Source](/src/base_state.lua)
 
-Game | Menu
---- | ---
-Entire game world | Main game menu
-Entities (player, NPCs, etc.) | Controls to change client settings
+Game | Contains and displays the entire game world
+---- |
+  | Entities (player, NPCs, etc.
+Menu | Contains and displays the controls for a main menu environment
+---- |
+  | Change client settings
+  | Load and save the game
+  | Exit the game
