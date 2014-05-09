@@ -13,6 +13,12 @@ local PrintRegion = Class{
         invert
     },
 
+    colors = {
+        back = Colors.black,
+        geom = Debug.colors.geom,
+        text = Debug.colors.text
+    },
+
     anchor = "top-left",
 }
 local this = PrintRegion
@@ -30,6 +36,12 @@ function this:init(x, y, anchor, w_max)
     self.flags = {
         background = false,
         invert = false
+    }
+
+    self.colors = {
+        back = ShallowCopy(this.colors.back),
+        geom = ShallowCopy(this.colors.geom),
+        text = ShallowCopy(this.colors.text)
     }
 
     self.anchor = anchor or this.anchor
@@ -85,12 +97,12 @@ function this:draw()
 
     -- Background
     if self.flags.background then
-        G.setColor(Colors.black)
+        G.setColor(self.colors.back)
         G.rectangle("fill", px, py, self.dim.x, self.dim.y)
     end
 
     -- Print lines
-    G.setColor(Colors.yellow)
+    G.setColor(self.colors.text)
     local i = 0
     for _, line in ipairs(self.lines) do
         G.printf(line, px, py+(i*G.font:getHeight()), self.dim.x, "left")
@@ -98,7 +110,7 @@ function this:draw()
     end
 
     if Debug.enabled and Debug.draw_geom then
-        G.setColor(Colors.blue)
+        G.setColor(self.colors.geom)
         G.rectangle("line", px, py, self.dim.x, i*G.font:getHeight())
     end
 

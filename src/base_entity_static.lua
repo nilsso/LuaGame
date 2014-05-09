@@ -1,5 +1,5 @@
 -- -----------------------------------------------
--- Class declaration
+-- Class Declaration
 -- -----------------------------------------------
 local BaseEntityStatic = Class{
     __includes = nil,
@@ -19,7 +19,7 @@ local BaseEntityStatic = Class{
 local this = BaseEntityStatic
 
 -- -----------------------------------------------
--- Function definitions
+-- Function Definitions
 -- -----------------------------------------------
 function this:init(x, y, w, h)
 
@@ -140,5 +140,6 @@ function this:drawDebugText()
     end
 end
 
+-- Return this module
 return this
 

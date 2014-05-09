@@ -65,6 +65,15 @@ function this:init(s,x,y,w,h)
     self:updateBounds()
 end
 
+function this:press()
+end
+
+function this:mousepressed(key)
+    if key == "l" then
+        isDown = true
+    end
+end
+
 function BaseButton:update(dt)
     -- Parent update
     BaseEntityStatic.update(self,dt)
