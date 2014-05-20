@@ -2,12 +2,10 @@
 -- Class declaration
 -- -----------------------------------------------
 local BaseState = Class{
-    -- Entities
     entities,
-
-    -- Print regions
-    entitire_pr,
-    info_pr
+    keybinds,
+    info_pr,
+    entities_pr
 }
 local this = BaseState
 
@@ -15,30 +13,36 @@ local this = BaseState
 -- Function definitions
 -- -----------------------------------------------
 function this:init()
-    -- Initialize entity table if nil
     self.entities = self.entities or setmetatable({}, {__mode = "k"})
-
-    -- Initialize print regions if nil
+    self.keybinds = self.keybinds or Keybinds()
     self.info_pr = self.info_pr or PrintRegion(5, 5, "top-left")
-    self.entities_pr = self.entities_pr or PrintRegion(W.w-5, 5, "top-right")
+    self.entities_pr = self.entities_pr or PrintRegion(lw.w-5, 5, "top-right")
 end
 
-function this:entityCount(e)
-    local i = 0
-
-    -- For each entity
+function this:mousepressed(x, y, button)
     for k, v in pairs(self.entities) do
-        -- If entity type matches current entity or type not specified
-        if (not e or v.__index == e.__index) then
-            i = i + 1
+        if v:capturing() then
+            v:mousepressed(button)
         end
     end
+end
 
-    -- Return entity count
-    return i
+local function printButtonStates()
+    local l = {}
 end
 
 function this:update(dt)
+    -- Mouse down
+    if lm.isDown("l") then
+        for k, v in pairs(self.entities) do
+            if v:capturing() then
+                if v.press then
+                    v:press("l")
+                end
+            end
+        end
+    end
+
     -- Update all entities
     for k, v in pairs(self.entities) do
         if v.update then
@@ -87,25 +91,25 @@ end
 
 function this:drawDebugGeom()
     -- Graphics draw color
-    G.setColor(Debug.colors.geom)
+    lg.setColor(Debug.colors.geom)
 
     -- Graphics line width
-    G.setLineWidth(1)
+    lg.setLineWidth(1)
 
     -- Draw a horrizontal and a vertical line to divide the window
-    G.line(0, W.getHeight()/2, W.getWidth(), W.getHeight()/2)
-    G.line(W.getWidth()/2, 0, W.getWidth()/2, W.getHeight())
+    lg.line(0, lw.h / 2, lw.w, lw.h / 2)
+    lg.line(lw.w / 2, 0, lw.w / 2, lw.w)
 end
 
 function this:drawDebugText()
     -- Add lines to the info print region
     self.info_pr:print(string.format("State: %s", self.name))
-    self.info_pr:print(string.format("mouse.pos(%i,%i)", M.getPosition()))
+    self.info_pr:print(string.format("mouse.pos(%i,%i)", lm.getPosition()))
     -- Draw the info print region
     self.info_pr:draw()
 
     -- Add lines to the entities print region
-    self.entities_pr.pos.x = W.w-5
+    self.entities_pr.pos.x = lw.w - 5
     self.entities_pr:print(string.format("ENTITIES (count=%d)", self:entityCount()))
     for k, v in pairs(self.entities) do
         -- Add each entity
@@ -113,6 +117,21 @@ function this:drawDebugText()
     end
     -- Draw the entities print region
     self.entities_pr:draw()
+end
+
+function this:entityCount(e)
+    local i = 0
+
+    -- For each entity
+    for k, v in pairs(self.entities) do
+        -- If entity type matches current entity or type not specified
+        if (not e or v.__index == e.__index) then
+            i = i + 1
+        end
+    end
+
+    -- Return entity count
+    return i
 end
 
 -- Return this module

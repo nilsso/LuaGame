@@ -1,0 +1,12 @@
+{
+    "name" : "Generic Map",
+    "dim_map" : {
+        "x" : 10,
+        "y" : 10
+    },
+    "dim_cell" : {
+        "x" : 16,
+        "y" : 16
+    },
+    "layers": [ [ [ "ltgray", null, "ltgray" ], [ null, "ltgray" ] ], [ [ null, "dkgray" ], [ "dkgray", null, "dkgray" ] ], null, null, [ null, [ "blue", "blue", "blue" ] ] ]
+}

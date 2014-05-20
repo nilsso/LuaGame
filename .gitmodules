@@ -1,3 +1,12 @@
 [submodule "lib/hump"]
 	path = lib/hump
 	url = git://github.com/vrld/hump
+[submodule "Advanced-Tiled-Loader"]
+	path = Advanced-Tiled-Loader
+	url = https://github.com/Kadoba/Advanced-Tiled-Loader.git
+[submodule "lib/atl"]
+	path = lib/atl
+	url = https://github.com/Kadoba/Advanced-Tiled-Loader.git
+[submodule "lib/flux"]
+	path = lib/flux
+	url = https://github.com/rxi/flux.git

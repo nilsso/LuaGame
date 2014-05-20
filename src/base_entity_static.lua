@@ -1,12 +1,12 @@
 -- -----------------------------------------------
--- Class Declaration
+-- Base entity static class
 -- -----------------------------------------------
 local BaseEntityStatic = Class{
     __includes = nil,
     table = nil,
 
-    pos = Vector(W.w/2,W.h/2),
-    dim = Vector(16,16),
+    pos = Vector(lw.w / 2, lw.h / 2),
+    dim = Vector(16, 16),
 
     bounds,
 
@@ -22,15 +22,11 @@ local this = BaseEntityStatic
 -- Function Definitions
 -- -----------------------------------------------
 function this:init(x, y, w, h)
+    -- Initialize instance variables
+    self.pos = Vector(x or this.pos.x, y or this.pos.y)
+    self.dim = Vector(w or this.dim.x, h or this.dim.y)
 
-    self.pos = Vector(
-        x or this.pos.x,
-        y or this.pos.y)
-    self.dim = Vector(
-        w or this.dim.x,
-        h or this.dim.y)
-
-    self.bounds = {l,t,r,b}
+    self.bounds = {l, t, r, b}
 
     self.colors = {
         back = ShallowCopy(this.colors.back),
@@ -60,14 +56,14 @@ function this:destroy()
 end
 
 function this:updateBounds()
-    self.bounds.l = self.pos.x-self.dim.x/2
-    self.bounds.t = self.pos.y-self.dim.y/2
-    self.bounds.r = self.pos.x+self.dim.x/2
-    self.bounds.b = self.pos.y+self.dim.y/2
+    self.bounds.l = self.pos.x - self.dim.x / 2
+    self.bounds.t = self.pos.y - self.dim.y / 2
+    self.bounds.r = self.pos.x + self.dim.x / 2
+    self.bounds.b = self.pos.y + self.dim.y / 2
 end
 
 function this:capturing()
-    local mx, my = M.getPosition()
+    local mx, my = lm.getPosition()
     return (
         mx >= self.bounds.l and
         mx <= self.bounds.r and
@@ -81,17 +77,18 @@ end
 
 function this:draw()
     -- Set color
-    G.setColor(self.colors.back)
+    lg.setColor(self.colors.back)
 
     -- Draw primative
-    G.rectangle("fill",
+    lg.rectangle("fill",
         self.bounds.l, self.bounds.t,
         self.dim.x, self.dim.y)
 end
 
 function this:drawDebugGeom()
+    lg.setColor(Debug.colors.geom)
     -- Bounding rectangle
-    G.rectangle("line",
+    lg.rectangle("line",
         self.bounds.l, self.bounds.t,
         self.dim.x, self.dim.y)
 end
@@ -99,19 +96,19 @@ end
 function this:drawDebugText()
     -- Update print region coordinates
     if self:capturing() then
-        local x, y = M.getPosition()
+        local x, y = lm.getPosition()
 
         -- Offset from mouse
-        if (x < W.w/2) then
-            self.info_pr.pos.x = x+10
-            if (y < W.h/2) then
+        if x < lw.w / 2 then
+            self.info_pr.pos.x = x + 10
+            if y < lw.h / 2 then
                 self.info_pr.anchor = "top-left"
             else
                 self.info_pr.anchor = "bottom-left"
             end
         else
-            self.info_pr.pos.x = x-10
-            if (y < W.h/2) then
+            self.info_pr.pos.x = x - 10
+            if y < lw.h / 2 then
                 self.info_pr.anchor = "top-right"
             else
                 self.info_pr.anchor = "bottom-right"
@@ -120,11 +117,11 @@ function this:drawDebugText()
         self.info_pr.pos.y = y
     else
         -- Offset from object
-        if (self.pos.x < W.w/2) then
-            self.info_pr.pos.x = self.bounds.r+5
+        if self.pos.x < lw.w / 2 then
+            self.info_pr.pos.x = self.bounds.r + 5
             self.info_pr.anchor = "top-left"
         else
-            self.info_pr.pos.x = self.bounds.l-5
+            self.info_pr.pos.x = self.bounds.l - 5
             self.info_pr.anchor = "top-right"
         end
         self.info_pr.pos.y = self.bounds.t

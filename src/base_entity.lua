@@ -106,10 +106,10 @@ end
 
 function this:drawDebugGeom()
     -- Draw mode
-    G.setColor(Colors.blue, 255)
+    lg.setColor(Colors.blue, 255)
 
     -- Bounding circle
-    G.circle(
+    lg.circle(
         "line",
         self.pos.x,
         self.pos.y,
@@ -117,11 +117,11 @@ function this:drawDebugGeom()
         32)
 
     -- Direction
-    G.line(
-        self.pos.x+self.dir.x*self.draw_rad,
-        self.pos.y+self.dir.y*self.draw_rad,
-        self.pos.x+self.dir.x*(self.draw_rad+5),
-        self.pos.y+self.dir.y*(self.draw_rad+5))
+    lg.line(
+        self.pos.x + self.dir.x * self.draw_rad,
+        self.pos.y + self.dir.y * self.draw_rad,
+        self.pos.x + self.dir.x * (self.draw_rad +5 ),
+        self.pos.y + self.dir.y * (self.draw_rad +5 ))
 end
 
 function this:drawDebugText()
